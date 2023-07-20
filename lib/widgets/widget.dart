@@ -1,3 +1,4 @@
+export 'package:proyecto_chat/widgets/chat_messaje.dart';
 export 'package:proyecto_chat/widgets/boton_azul.dart';
 export 'package:proyecto_chat/pages/loading_page.dart';
 export 'package:proyecto_chat/widgets/Labels.dart';
