@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:proyecto_chat/services/auth_services.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:proyecto_chat/models/usuario.dart';
 
@@ -12,18 +13,22 @@ class _UsuariosPageState extends State<UsuariosPage> {
       RefreshController(initialRefresh: false);
 
   final usuarios = [
-    Usuario(uid: '1', nombre: 'jose', email: 'galo@gmail.com', online: true),
-    Usuario(uid: '2', nombre: 'Lujan', email: 'galo1@gmail.com', online: true),
-    Usuario(uid: '3', nombre: 'Pepe', email: 'galo2@gmail.com', online: true),
+    Usuario(uid: '1', nombre: 'jose', correo: 'galo@gmail.com', ponline: true),
     Usuario(
-        uid: '4', nombre: 'Gerardo', email: 'galo3@gmail.com', online: false),
+        uid: '2', nombre: 'Lujan', correo: 'galo1@gmail.com', ponline: true),
+    Usuario(uid: '3', nombre: 'Pepe', correo: 'galo2@gmail.com', ponline: true),
+    Usuario(
+        uid: '4', nombre: 'Gerardo', correo: 'galo3@gmail.com', ponline: false),
     Usuario(
         uid: '5',
         nombre: 'El pensiones',
-        email: 'galo4@gmail.com',
-        online: true),
+        correo: 'galo4@gmail.com',
+        ponline: true),
     Usuario(
-        uid: '6', nombre: 'El deudas', email: 'galo5@gmail.com', online: true),
+        uid: '6',
+        nombre: 'El deudas',
+        correo: 'galo5@gmail.com',
+        ponline: true),
   ];
   @override
   Widget build(BuildContext context) {
@@ -38,7 +43,11 @@ class _UsuariosPageState extends State<UsuariosPage> {
           elevation: 1,
           backgroundColor: Colors.white,
           leading: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, 'login');
+                AuthService.deleteToken();
+                //Navigator.pushReplacementNamed(context, 'login');
+              },
               icon: const Icon(Icons.exit_to_app),
               color: Colors.black54),
           actions: [
@@ -83,7 +92,7 @@ class _UsuariosPageState extends State<UsuariosPage> {
   ListTile _Lista_usuario(Usuario usuario) {
     return ListTile(
       title: Text(usuario.nombre!),
-      subtitle: Text(usuario.email!),
+      subtitle: Text(usuario.correo!),
       leading: CircleAvatar(
         child: Text(usuario.nombre!.substring(0, 2)),
         backgroundColor: Colors.blue[100],
@@ -92,7 +101,7 @@ class _UsuariosPageState extends State<UsuariosPage> {
         width: 10,
         height: 10,
         decoration: BoxDecoration(
-            color: usuario.online! ? Colors.green[300] : Colors.red,
+            color: usuario.ponline! ? Colors.green[300] : Colors.red,
             borderRadius: BorderRadius.circular(100)),
       ),
     );

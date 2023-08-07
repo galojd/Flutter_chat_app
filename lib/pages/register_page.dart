@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:proyecto_chat/services/auth_services.dart';
+import '../helpers/mostrar_alerta.dart';
 import '../widgets/widget.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -46,6 +49,7 @@ class __FormStateState extends State<_FormState> {
   final nombreCtrl = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
     return Container(
       margin: EdgeInsets.only(top: 40),
       padding: EdgeInsets.symmetric(horizontal: 30),
@@ -79,12 +83,26 @@ class __FormStateState extends State<_FormState> {
             height: 10,
           ),
           Boton_Azul(
-            texto: 'Ingresar',
-            onpressed: () {
-              print(emailCtrl.text);
-              print(contraCtrl.text);
-              print(nombreCtrl.text);
-            },
+            texto: 'Registrar',
+            onpressed: authService.autenticando
+                ? null
+                : () async {
+                    //desaparece el teclado despues de escribir
+                    FocusScope.of(context).unfocus();
+                    final registraOk = await authService.register(
+                        nombreCtrl.text.trim(),
+                        emailCtrl.text.trim(),
+                        contraCtrl.text.trim());
+
+                    if (registraOk == true) {
+                      //Navegar a otra pantalla
+                      Navigator.pushReplacementNamed(context, 'usuarios');
+                      print('excente todo esta saliendo muy bien');
+                    } else {
+                      //Mostrar alerta
+                      mostrarAlerta(context, 'registro incorrecto', registraOk);
+                    }
+                  },
           )
         ],
       ),

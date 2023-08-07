@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:proyecto_chat/helpers/mostrar_alerta.dart';
+import 'package:proyecto_chat/services/auth_services.dart';
 
 import '../widgets/widget.dart';
 
@@ -46,6 +49,7 @@ class __FormStateState extends State<_FormState> {
   final contraCtrl = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
     return Container(
       margin: EdgeInsets.only(top: 40),
       padding: EdgeInsets.symmetric(horizontal: 30),
@@ -71,10 +75,23 @@ class __FormStateState extends State<_FormState> {
           ),
           Boton_Azul(
             texto: 'Ingresar',
-            onpressed: () {
-              print(emailCtrl.text);
-              print(contraCtrl.text);
-            },
+            onpressed: authService.autenticando
+                ? null
+                : () async {
+                    //desaparece el teclado despues de escribir
+                    FocusScope.of(context).unfocus();
+                    final loginOk = await authService.login(
+                        emailCtrl.text, contraCtrl.text);
+
+                    if (loginOk) {
+                      //Navegar a otra pantalla
+                      Navigator.pushReplacementNamed(context, 'usuarios');
+                    } else {
+                      //Mostrar alerta
+                      mostrarAlerta(context, 'Login Incorrecto',
+                          'Revise sus credenciales');
+                    }
+                  },
           )
         ],
       ),
